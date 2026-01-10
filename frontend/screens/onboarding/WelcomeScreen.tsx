@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
+  ImageBackground,
   Image,
 } from 'react-native';
 
@@ -12,145 +13,215 @@ const COLORS = {
   neonPurple: '#C77DFF',
   softWhite: '#F1F6FF',
   mutedText: '#A9B7D0',
+  darkBg: 'rgba(0,0,0,0.35)',
 };
 
-function LogoOrb() {
-  return (
-    <View style={styles.logoOuter}>
-      <View style={styles.logoInner} />
-    </View>
-  );
-}
-
 export default function WelcomeScreen({ navigation }: { navigation: any }) {
+  const [brandPressed, setBrandPressed] = useState(false);
+
   return (
-    <View style={styles.root}>
-      {/* BACKGROUND IMAGE — SINGLE SOURCE */}
-      <Image
-        source={require('../../assets/bg-placeholder.png')}
-        style={styles.backgroundImage}
-        resizeMode="cover"
-        accessibilityIgnoresInvertColors
-      />
+    <ImageBackground
+      source={require('../../assets/bg-placeholder.png')}
+      style={styles.background}
+      resizeMode="cover"
+      accessibilityIgnoresInvertColors
+    >
+      {/* Overlay for readability */}
+      <View style={styles.overlay} />
 
-      {/* CONTENT */}
       <View style={styles.container}>
-        <View style={styles.content}>
-          <LogoOrb />
+        {/* TOP SECTION */}
+        <View style={styles.topSection}>
+          {/* Logo */}<View style={styles.logoGlow}>
+  <View style={styles.logoMask}>
+    <View style={styles.logoCircle}>
+  <Image
+    source={require('../../assets/logo.png')}
+    style={styles.logoImage}
+    resizeMode="cover"
+  />
+</View>
+  </View>
+</View>
 
+
+
+
+          {/* App name */}
+          <Pressable
+            onPressIn={() => setBrandPressed(true)}
+            onPressOut={() => setBrandPressed(false)}
+            accessibilityRole="text"
+          >
+            <Text
+              style={[
+                styles.brand,
+                {
+                  color: brandPressed
+                    ? COLORS.neonPurple
+                    : COLORS.neonBlue,
+                },
+              ]}
+            >
+              OneVoice
+            </Text>
+          </Pressable>
+
+          {/* Headline */}
           <Text style={styles.title}>
-            Understand{'\n'}
+            Understand{' '}
             <Text style={styles.titleAccent}>Conversations</Text>
           </Text>
 
-          <Text style={styles.subtitle}>
-            Be understood. Communicate freely without barriers.
+          {/* Tagline */}
+          <Text style={styles.subtitlePrimary}>
+            Be understood anywhere.
+          </Text>
+          <Text style={styles.subtitleSecondary}>
+            Communicate freely.
           </Text>
         </View>
 
-        <Pressable
-          style={({ pressed }) => [
-            styles.cta,
-            pressed && { opacity: 0.88 },
-          ]}
-          onPress={() => navigation.navigate('VisualPreference')}
-          accessibilityRole="button"
-          accessibilityLabel="Get started"
-        >
-          <View style={styles.ctaGradient}>
+        {/* BOTTOM CTA */}
+        <View style={styles.bottomSection}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.cta,
+              pressed && { opacity: 0.85 },
+            ]}
+            onPress={() => navigation.navigate('VisualPreference')}
+            accessibilityRole="button"
+            accessibilityLabel="Get started"
+          >
             <Text style={styles.ctaText}>Get started</Text>
-          </View>
-        </Pressable>
+          </Pressable>
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  root: {
+  background: {
     flex: 1,
-    backgroundColor: '#000',
   },
 
-  backgroundImage: {
+  overlay: {
     ...StyleSheet.absoluteFillObject,
-    opacity: 0.22, // 🔑 image clearly visible but not noisy
+    backgroundColor: COLORS.darkBg,
   },
 
   container: {
     flex: 1,
-    paddingHorizontal: 28,
-    paddingTop: 80,
+    paddingHorizontal: 32,
+    paddingTop: 72,
     paddingBottom: 48,
     justifyContent: 'space-between',
   },
 
-  content: {
-    alignItems: 'flex-start',
-  },
-
-  logoOuter: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
-    marginBottom: 48,
+  topSection: {
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.08)',
-    shadowColor: COLORS.neonPurple,
-    shadowOpacity: 0.6,
-    shadowRadius: 26,
-    elevation: 12,
+    marginTop: 24, // pushes everything slightly down
   },
 
-  logoInner: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: COLORS.neonBlue,
-    opacity: 0.95,
+  logoGlow: {
+  width: 96,
+  height: 96,
+  borderRadius: 48,
+  marginBottom: 12,
+  alignItems: 'center',
+  justifyContent: 'center',
+  shadowColor: COLORS.neonPurple,
+  shadowOpacity: 0.7,
+  shadowRadius: 22,
+  elevation: 12,
+},
+
+logoMask: {
+  width: 96,
+  height: 96,
+  borderRadius: 48,
+  backgroundColor: 'rgba(255,255,255,0.85)',
+  alignItems: 'center',
+  justifyContent: 'center',
+},
+
+logoCircle: {
+  width: 90,
+  height: 90,
+  borderRadius: 45,        // EXACTLY half
+  overflow: 'hidden',      // 🔒 this is what clips
+  backgroundColor: '#fff', // or transparent
+  alignItems: 'center',
+  justifyContent: 'center',
+},
+
+logoImage: {
+  width: '100%',
+  height: '100%',
+},
+
+
+
+  brand: {
+    fontFamily: 'SpaceGrotesk_600SemiBold',
+    fontSize: 24,
+    letterSpacing: 1.4,
+    marginTop: 0,
+    marginBottom: 42,
   },
 
   title: {
-    fontSize: 34,
+    fontFamily: 'SpaceGrotesk_600SemiBold',
+    fontSize: 36,
     lineHeight: 40,
-    fontWeight: '600',
     color: COLORS.softWhite,
+    textAlign: 'center',
+    marginBottom: 14,
+    marginTop: 22, // NEW
+
   },
 
   titleAccent: {
     color: COLORS.neonPurple,
-    fontWeight: '700',
   },
 
-  subtitle: {
-    marginTop: 18,
-    fontSize: 16,
-    lineHeight: 24,
+    subtitlePrimary: {
+    fontFamily: 'Inter_500Medium',
+    fontSize: 13,
+    lineHeight: 22,
+    color: COLORS.softWhite,
+    textAlign: 'center',
+  },
+
+  subtitleSecondary: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 13,
+    lineHeight: 21,
     color: COLORS.mutedText,
-    maxWidth: '85%',
+    textAlign: 'center',
+    marginTop: 1,
+    maxWidth: '90%',
+  },
+
+  bottomSection: {
+    alignItems: 'center',
   },
 
   cta: {
-    alignSelf: 'center',
-    width: '60%',
+    backgroundColor: COLORS.neonBlue,
     borderRadius: 28,
-    overflow: 'hidden',
+    paddingVertical: 14,
+    paddingHorizontal: 48,
     shadowColor: COLORS.neonBlue,
     shadowOpacity: 0.5,
     shadowRadius: 14,
     elevation: 8,
   },
 
-  ctaGradient: {
-    paddingVertical: 14,
-    alignItems: 'center',
-    backgroundColor: COLORS.neonBlue, // solid, clean CTA
-  },
-
   ctaText: {
+    fontFamily: 'Inter_500Medium',
     fontSize: 17,
-    fontWeight: '600',
     color: '#0A0F2C',
     letterSpacing: 0.4,
   },
