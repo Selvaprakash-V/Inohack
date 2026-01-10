@@ -1,84 +1,157 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Image,
+} from 'react-native';
 
-// Placeholder logo as a circle
-function LogoPlaceholder() {
+const COLORS = {
+  neonBlue: '#5AD7FF',
+  neonPurple: '#C77DFF',
+  softWhite: '#F1F6FF',
+  mutedText: '#A9B7D0',
+};
+
+function LogoOrb() {
   return (
-    <View style={styles.logo} accessibilityLabel="OneVoice logo placeholder" />
+    <View style={styles.logoOuter}>
+      <View style={styles.logoInner} />
+    </View>
   );
 }
 
 export default function WelcomeScreen({ navigation }: { navigation: any }) {
   return (
-    <View style={styles.container}>
-      <LogoPlaceholder />
-      <Text style={styles.tagline} accessibilityRole="header">
-        Understand conversations. Be understood.
-      </Text>
-      <TouchableOpacity
-        style={styles.button}
-        activeOpacity={0.8}
-        onPress={() => navigation.navigate('VisualPreference')}
-        accessibilityRole="button"
-        accessibilityLabel="Get Started"
-      >
-        <Text style={styles.buttonText}>Get Started</Text>
-      </TouchableOpacity>
+    <View style={styles.root}>
+      {/* BACKGROUND IMAGE — SINGLE SOURCE */}
+      <Image
+        source={require('../../assets/bg-placeholder.png')}
+        style={styles.backgroundImage}
+        resizeMode="cover"
+        accessibilityIgnoresInvertColors
+      />
+
+      {/* CONTENT */}
+      <View style={styles.container}>
+        <View style={styles.content}>
+          <LogoOrb />
+
+          <Text style={styles.title}>
+            Understand{'\n'}
+            <Text style={styles.titleAccent}>Conversations</Text>
+          </Text>
+
+          <Text style={styles.subtitle}>
+            Be understood. Communicate freely without barriers.
+          </Text>
+        </View>
+
+        <Pressable
+          style={({ pressed }) => [
+            styles.cta,
+            pressed && { opacity: 0.88 },
+          ]}
+          onPress={() => navigation.navigate('VisualPreference')}
+          accessibilityRole="button"
+          accessibilityLabel="Get started"
+        >
+          <View style={styles.ctaGradient}>
+            <Text style={styles.ctaText}>Get started</Text>
+          </View>
+        </Pressable>
+      </View>
     </View>
   );
 }
 
-const NEON_BLUE = '#4FC3F7';
-const DARK_BG = '#1A2233';
-const GREY = '#B0BEC5';
-
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
+
+  backgroundImage: {
+    ...StyleSheet.absoluteFillObject,
+    opacity: 0.22, // 🔑 image clearly visible but not noisy
+  },
+
   container: {
     flex: 1,
-    backgroundColor: DARK_BG,
+    paddingHorizontal: 28,
+    paddingTop: 80,
+    paddingBottom: 48,
+    justifyContent: 'space-between',
+  },
+
+  content: {
+    alignItems: 'flex-start',
+  },
+
+  logoOuter: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    marginBottom: 48,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 24,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    shadowColor: COLORS.neonPurple,
+    shadowOpacity: 0.6,
+    shadowRadius: 26,
+    elevation: 12,
   },
-  logo: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: NEON_BLUE,
-    marginBottom: 32,
-    borderWidth: 4,
-    borderColor: GREY,
-    shadowColor: NEON_BLUE,
-    shadowOffset: { width: 0, height: 4 },
+
+  logoInner: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: COLORS.neonBlue,
+    opacity: 0.95,
+  },
+
+  title: {
+    fontSize: 34,
+    lineHeight: 40,
+    fontWeight: '600',
+    color: COLORS.softWhite,
+  },
+
+  titleAccent: {
+    color: COLORS.neonPurple,
+    fontWeight: '700',
+  },
+
+  subtitle: {
+    marginTop: 18,
+    fontSize: 16,
+    lineHeight: 24,
+    color: COLORS.mutedText,
+    maxWidth: '85%',
+  },
+
+  cta: {
+    alignSelf: 'center',
+    width: '60%',
+    borderRadius: 28,
+    overflow: 'hidden',
+    shadowColor: COLORS.neonBlue,
     shadowOpacity: 0.5,
-    shadowRadius: 10,
+    shadowRadius: 14,
     elevation: 8,
   },
-  tagline: {
-    fontSize: 28,
-    color: GREY,
-    textAlign: 'center',
-    marginBottom: 48,
-    fontWeight: 'bold',
-    letterSpacing: 0.5,
-  },
-  button: {
-    backgroundColor: NEON_BLUE,
-    borderRadius: 12,
-    paddingVertical: 18,
-    paddingHorizontal: 48,
+
+  ctaGradient: {
+    paddingVertical: 14,
     alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: NEON_BLUE,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.4,
-    shadowRadius: 6,
-    elevation: 4,
+    backgroundColor: COLORS.neonBlue, // solid, clean CTA
   },
-  buttonText: {
-    color: DARK_BG,
-    fontSize: 22,
-    fontWeight: 'bold',
-    letterSpacing: 1,
+
+  ctaText: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#0A0F2C',
+    letterSpacing: 0.4,
   },
 });
