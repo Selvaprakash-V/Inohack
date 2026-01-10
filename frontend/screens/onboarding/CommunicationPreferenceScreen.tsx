@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   Pressable,
+  Image,
 } from 'react-native';
 import { useOnboarding } from '../../context/OnboardingContext';
 
@@ -17,12 +18,14 @@ const COLORS = {
   mutedText: '#A9B7D0',
 };
 
+const IMAGES = {
+  text: require('../../assets/text.png'),
+  sign: require('../../assets/signlang.png'),
+  both: require('../../assets/both.png'),
+};
+
 export default function CommunicationPreferenceScreen({ navigation }: any) {
   const { communicationPreference, setCommunicationPreference } = useOnboarding();
-
-  const isText = communicationPreference === 'text';
-  const isSign = communicationPreference === 'sign';
-  const isBoth = communicationPreference === 'both';
 
   return (
     <View style={styles.container}>
@@ -36,28 +39,33 @@ export default function CommunicationPreferenceScreen({ navigation }: any) {
         </Text>
       </View>
 
-      {/* Primary cards */}
-      <View style={styles.cardRow}>
+      {/* Cards */}
+      <View style={styles.grid}>
         {/* TEXT */}
         <Pressable
           style={[
             styles.card,
-            isText && styles.cardActive,
+            communicationPreference === 'text' && styles.cardActive,
           ]}
           onPress={() => setCommunicationPreference('text')}
         >
-          <View style={styles.imageLayer} />
+          <View style={styles.imageLayer}>
+            <Image
+              source={IMAGES.text}
+              style={styles.contextImage}
+              resizeMode="contain"
+            />
+          </View>
 
           <View style={styles.cardContent}>
             <Text
               style={[
                 styles.cardTitle,
-                isText && styles.cardTitleActive,
+                communicationPreference === 'text' && styles.cardTitleActive,
               ]}
             >
               Text
             </Text>
-
             <Text style={styles.cardDescription}>
               Read live captions and messages.
             </Text>
@@ -68,22 +76,27 @@ export default function CommunicationPreferenceScreen({ navigation }: any) {
         <Pressable
           style={[
             styles.card,
-            isSign && styles.cardActive,
+            communicationPreference === 'sign' && styles.cardActive,
           ]}
           onPress={() => setCommunicationPreference('sign')}
         >
-          <View style={styles.imageLayer} />
+          <View style={styles.imageLayer}>
+            <Image
+              source={IMAGES.sign}
+              style={styles.contextImage}
+              resizeMode="contain"
+            />
+          </View>
 
           <View style={styles.cardContent}>
             <Text
               style={[
                 styles.cardTitle,
-                isSign && styles.cardTitleActive,
+                communicationPreference === 'sign' && styles.cardTitleActive,
               ]}
             >
               Sign Language
             </Text>
-
             <Text style={styles.cardDescription}>
               Communicate using hand gestures.
             </Text>
@@ -94,23 +107,28 @@ export default function CommunicationPreferenceScreen({ navigation }: any) {
       {/* BOTH */}
       <Pressable
         style={[
-          styles.bothCard,
-          isBoth && styles.cardActive,
+          styles.cardWide,
+          communicationPreference === 'both' && styles.cardActive,
         ]}
         onPress={() => setCommunicationPreference('both')}
       >
-        <View style={styles.imageLayer} />
+        <View style={styles.imageLayer}>
+          <Image
+            source={IMAGES.both}
+            style={styles.contextImageWide}
+            resizeMode="contain"
+          />
+        </View>
 
         <View style={styles.cardContent}>
           <Text
             style={[
               styles.cardTitle,
-              isBoth && styles.cardTitleActive,
+              communicationPreference === 'both' && styles.cardTitleActive,
             ]}
           >
             Both
           </Text>
-
           <Text style={styles.cardDescription}>
             Switch between text and sign anytime.
           </Text>
@@ -159,10 +177,10 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
 
-  cardRow: {
+  grid: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 12,
+    rowGap: 16,
   },
 
   card: {
@@ -173,19 +191,17 @@ const styles = StyleSheet.create({
     padding: 18,
     borderWidth: 1,
     borderColor: COLORS.cardBorder,
-    position: 'relative',
     overflow: 'hidden',
   },
 
-  bothCard: {
+  cardWide: {
     marginTop: 18,
-    minHeight: 140,
+    minHeight: 150,
     backgroundColor: COLORS.cardBg,
     borderRadius: 18,
     padding: 20,
     borderWidth: 1,
     borderColor: COLORS.cardBorder,
-    position: 'relative',
     overflow: 'hidden',
   },
 
@@ -194,15 +210,29 @@ const styles = StyleSheet.create({
   },
 
   imageLayer: {
-    position: 'absolute',
-    top: 12,
-    left: 12,
-    right: 12,
-    bottom: 12,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255,255,255,0.12)',
-    opacity: 0.18,
-  },
+  position: 'absolute',
+  top: -50,        // 🔑 bleed outside
+  left: -40,
+  right: -40,
+  bottom: -40,
+  justifyContent: 'center',
+  alignItems: 'center',
+  opacity: 0.22,
+},
+
+
+  contextImage: {
+  width: '160%',      // 🔍 aggressive zoom
+  height: '160%',
+  resizeMode: 'cover', // 🔥 THIS is critical
+},
+
+contextImageWide: {
+  width: '140%',
+  height: '140%',
+  resizeMode: 'cover',
+},
+
 
   cardContent: {
     flex: 1,
@@ -213,7 +243,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SpaceGrotesk_600SemiBold',
     fontSize: 15,
     letterSpacing: 0.6,
-    color: COLORS.mutedText,
+    color: COLORS.neonBlue,
     marginBottom: 6,
     textAlign: 'center',
   },

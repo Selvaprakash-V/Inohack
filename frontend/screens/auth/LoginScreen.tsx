@@ -1,116 +1,141 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Pressable, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+} from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+const COLORS = {
+  bg: '#0A0F2C',
+  cardBg: 'rgba(255,255,255,0.06)',
+  cardBorder: 'rgba(255,255,255,0.1)',
+  neonBlue: '#5AD7FF',
+  neonPurple: '#C77DFF',
+  softWhite: '#F1F6FF',
+  mutedText: '#A9B7D0',
+};
 
 export default function LoginScreen() {
   const handleGoogleLogin = () => {
     console.log('Google login pressed (placeholder)');
-    // Placeholder: Add real auth logic later
   };
 
   const handleEmailLogin = () => {
     console.log('Email login pressed (placeholder)');
-    // Placeholder: Add real auth logic later
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title} accessibilityRole="header">
-        Sign in to OneVoice
-      </Text>
-      <Text style={styles.subtitle}>
-        Your preferences and communication settings will be saved securely
-      </Text>
-      <TouchableOpacity
-        style={styles.googleButton}
-        activeOpacity={0.85}
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.title}>Sign in to OneVoice</Text>
+        <Text style={styles.subtitle}>
+          Your preferences and communication settings are saved securely.
+        </Text>
+      </View>
+
+      {/* Google Button */}
+      <Pressable
+        style={({ pressed }) => [
+          styles.googleButton,
+          pressed && { opacity: 0.9 },
+        ]}
         onPress={handleGoogleLogin}
         accessibilityRole="button"
         accessibilityLabel="Continue with Google"
       >
-        <MaterialCommunityIcons name="google" size={28} color={NEON_BLUE} style={styles.icon} />
-        <Text style={styles.googleButtonText}>Continue with Google</Text>
-      </TouchableOpacity>
+        <MaterialCommunityIcons
+          name="google"
+          size={22}
+          color={COLORS.neonBlue}
+          style={styles.googleIcon}
+        />
+        <Text style={styles.googleText}>Continue with Google</Text>
+      </Pressable>
+
+      {/* Divider */}
+      <Text style={styles.orText}>or</Text>
+
+      {/* Email Option */}
       <Pressable
-        style={({ pressed }) => [styles.emailButton, pressed && styles.emailButtonPressed]}
         onPress={handleEmailLogin}
         accessibilityRole="button"
         accessibilityLabel="Use email instead"
       >
-        <Text style={styles.emailButtonText}>Use email instead</Text>
+        <Text style={styles.emailText}>Use email instead</Text>
       </Pressable>
     </View>
   );
 }
 
-const NEON_BLUE = '#4FC3F7';
-const DARK_BG = '#1A2233';
-const GREY = '#B0BEC5';
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: DARK_BG,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-  },
-  title: {
-    fontSize: 28,
-    color: GREY,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    textAlign: 'center',
-    letterSpacing: 0.5,
-  },
-  subtitle: {
-    fontSize: 18,
-    color: GREY,
-    marginBottom: 40,
-    textAlign: 'center',
-    letterSpacing: 0.2,
-  },
-  googleButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-    borderColor: NEON_BLUE,
-    borderWidth: 2,
-    borderRadius: 12,
-    paddingVertical: 16,
+    backgroundColor: COLORS.bg,
     paddingHorizontal: 32,
-    marginBottom: 24,
-    width: '100%',
     justifyContent: 'center',
-    shadowColor: NEON_BLUE,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 4,
   },
-  icon: {
-    marginRight: 16,
+
+  header: {
+    marginTop: 20,
+    marginBottom: 60,
   },
-  googleButtonText: {
-    color: NEON_BLUE,
-    fontSize: 20,
-    fontWeight: 'bold',
-    letterSpacing: 0.5,
+
+  title: {
+    fontFamily: 'SpaceGrotesk_600SemiBold',
+    fontSize: 28,
+    color: COLORS.softWhite,
+    marginBottom: 10,
   },
-  emailButton: {
-    paddingVertical: 12,
-    paddingHorizontal: 8,
-    borderRadius: 8,
-    backgroundColor: 'transparent',
-    alignItems: 'center',
+
+  subtitle: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 15,
+    lineHeight: 22,
+    color: COLORS.neonBlue,
+    maxWidth: '90%',
   },
-  emailButtonPressed: {
-    backgroundColor: '#26324D',
+
+  googleButton: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderWidth: 1,
+  borderColor: COLORS.neonBlue,
+  borderRadius: 28,
+  paddingVertical: 14,
+  paddingHorizontal: 20,
+  marginBottom: 20,
+  backgroundColor: 'transparent',
+},
+
+  googleIcon: {
+    marginRight: 10,
+    color: COLORS.mutedText,
   },
-  emailButtonText: {
-    color: GREY,
-    fontSize: 18,
+
+  googleText: {
+    fontFamily: 'Inter_500Medium',
+    fontSize: 16,
+    color: COLORS.mutedText,
+    letterSpacing: 0.3,
+  },
+
+  orText: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 13,
+    color: COLORS.mutedText,
+    textAlign: 'center',
+    marginBottom: 18,
+  },
+
+  emailText: {
+    fontFamily: 'Inter_500Medium',
+    fontSize: 15,
+    color: COLORS.neonPurple,
+    textAlign: 'center',
     textDecorationLine: 'underline',
-    fontWeight: '500',
   },
 });

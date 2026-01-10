@@ -216,7 +216,7 @@ logoImage: {
     shadowColor: COLORS.neonBlue,
     shadowOpacity: 0.5,
     shadowRadius: 14,
-    elevation: 8,
+    elevation: 6,
   },
 
   ctaText: {

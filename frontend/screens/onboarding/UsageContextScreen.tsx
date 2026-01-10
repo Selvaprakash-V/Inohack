@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   Pressable,
+  Image,
 } from 'react-native';
 import { useOnboarding } from '../../context/OnboardingContext';
 
@@ -24,10 +25,18 @@ const CONTEXTS = [
   { label: 'Public Services', value: 'public' },
 ];
 
+// ✅ Correct image mapping (Expo-safe)
+const IMAGES = {
+  classroom: require('../../assets/classroom.jpg'),
+  workplace: require('../../assets/workplace.png'),
+  daily: require('../../assets/dailylife.png'),
+  public: require('../../assets/publicservices.png'),
+};
+
 export default function UsageContextScreen({ navigation }: any) {
   const { usageContexts, setUsageContexts } = useOnboarding();
 
-  // 🔑 Ensure Daily Life is always selected by default
+  // Ensure Daily Life is always selected
   useEffect(() => {
     if (!usageContexts.includes('daily')) {
       setUsageContexts(['daily', ...usageContexts]);
@@ -35,7 +44,7 @@ export default function UsageContextScreen({ navigation }: any) {
   }, []);
 
   const toggleContext = (value: string) => {
-    if (value === 'daily') return; // Daily Life cannot be deselected
+    if (value === 'daily') return;
 
     if (usageContexts.includes(value as any)) {
       setUsageContexts(usageContexts.filter((c) => c !== value));
@@ -48,9 +57,7 @@ export default function UsageContextScreen({ navigation }: any) {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.title}>
-          Where will you use OneVoice?
-        </Text>
+        <Text style={styles.title}>Where will you use OneVoice?</Text>
         <Text style={styles.subtitle}>
           Select all that apply. You can change this later.
         </Text>
@@ -70,8 +77,17 @@ export default function UsageContextScreen({ navigation }: any) {
               ]}
               onPress={() => toggleContext(ctx.value)}
             >
-              <View style={styles.imageLayer} />
+              {/* Background image layer */}
+              <View style={styles.imageLayer}>
+                <Image
+                  source={IMAGES[ctx.value as keyof typeof IMAGES]}
+                  style={styles.contextImage}
+                  resizeMode="cover"
+                />
+                
+              </View>
 
+              {/* Text content */}
               <View style={styles.cardContent}>
                 <Text
                   style={[
@@ -105,7 +121,6 @@ export default function UsageContextScreen({ navigation }: any) {
   );
 }
 
-/* Helper text per context */
 function getDescription(value: string) {
   switch (value) {
     case 'classroom':
@@ -164,7 +179,6 @@ const styles = StyleSheet.create({
     padding: 18,
     borderWidth: 1,
     borderColor: COLORS.cardBorder,
-    position: 'relative',
     overflow: 'hidden',
   },
 
@@ -179,9 +193,17 @@ const styles = StyleSheet.create({
     right: 12,
     bottom: 12,
     borderRadius: 12,
-    backgroundColor: 'rgba(255,255,255,0.12)',
-    opacity: 0.18,
+    justifyContent: 'center',
+    alignItems: 'center',
+    opacity: 0.2, // subtle background
   },
+
+  contextImage: {
+  width: '120%',
+  height: '118%',
+  opacity: 0.9,
+},
+
 
   cardContent: {
     flex: 1,
@@ -192,7 +214,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SpaceGrotesk_600SemiBold',
     fontSize: 15,
     letterSpacing: 0.6,
-    color: COLORS.mutedText,
+    color: COLORS.neonBlue,
     marginBottom: 6,
     textAlign: 'center',
   },

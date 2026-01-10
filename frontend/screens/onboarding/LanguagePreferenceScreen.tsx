@@ -1,48 +1,217 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Pressable,
+  Image,
+} from 'react-native';
 import { useOnboarding } from '../../context/OnboardingContext';
-import { LargeButton } from '../../components';
+
+const COLORS = {
+  bg: '#0A0F2C',
+  cardBg: 'rgba(255,255,255,0.06)',
+  cardBorder: 'rgba(255,255,255,0.08)',
+  neonPurple: '#C77DFF',
+  neonBlue: '#5AD7FF',
+  softWhite: '#F1F6FF',
+  mutedText: '#A9B7D0',
+};
 
 export default function LanguagePreferenceScreen({ navigation }: any) {
-  const { primaryLanguage, setPrimaryLanguage, secondaryLanguage, setSecondaryLanguage } = useOnboarding();
+  const {
+    primaryLanguage,
+    secondaryLanguage,
+    setPrimaryLanguage,
+    setSecondaryLanguage,
+  } = useOnboarding();
+
   const [primary, setPrimary] = useState(primaryLanguage || '');
   const [secondary, setSecondary] = useState(secondaryLanguage || '');
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Language Preferences</Text>
-      <Text style={styles.subtitle}>What is your primary language?</Text>
-      <TextInput
-        style={styles.input}
-        value={primary}
-        onChangeText={setPrimary}
-        placeholder="Primary Language"
-        placeholderTextColor="#B0B8C1"
-      />
-      <Text style={styles.subtitle}>Secondary language (optional):</Text>
-      <TextInput
-        style={styles.input}
-        value={secondary}
-        onChangeText={setSecondary}
-        placeholder="Secondary Language"
-        placeholderTextColor="#B0B8C1"
-      />
-      <LargeButton
-        title="Next"
+      {/* HEADER */}
+      <View style={styles.header}>
+        <Text style={styles.title}>Language preferences</Text>
+        <Text style={styles.subtitle}>
+          This helps us tailor captions and reading clarity.
+        </Text>
+      </View>
+
+      {/* FORM + WATERMARK */}
+      <View style={styles.formWrapper}>
+        {/* WATERMARK IMAGE */}
+        <View style={styles.languageImageWrapper}>
+          <Image
+            source={require('../../assets/languages.png')}
+            style={styles.languageImage}
+            resizeMode="contain"
+            accessible={false}
+          />
+        </View>
+
+        {/* PRIMARY LANGUAGE */}
+        <View style={styles.inputCard}>
+          <Text style={styles.inputLabel}>Primary language</Text>
+          <TextInput
+            value={primary}
+            onChangeText={setPrimary}
+            placeholder="e.g. English"
+            placeholderTextColor={COLORS.mutedText}
+            style={styles.input}
+          />
+        </View>
+
+        {/* SECONDARY LANGUAGE */}
+        <View style={styles.inputCard}>
+          <Text style={styles.inputLabel}>
+            Secondary language{' '}
+            <Text style={styles.optional}>(optional)</Text>
+          </Text>
+          <TextInput
+            value={secondary}
+            onChangeText={setSecondary}
+            placeholder="Add another language"
+            placeholderTextColor={COLORS.mutedText}
+            style={styles.input}
+          />
+        </View>
+
+        {/* HELPER */}
+        <Text style={styles.helper}>
+          You can change languages anytime later in settings.
+        </Text>
+      </View>
+
+      {/* CTA */}
+      <Pressable
+        style={({ pressed }) => [
+          styles.nextButton,
+          pressed && { opacity: 0.88 },
+        ]}
         onPress={() => {
-          setPrimaryLanguage(primary);
-          setSecondaryLanguage(secondary || undefined);
+          setPrimaryLanguage(primary.trim());
+          setSecondaryLanguage(
+            secondary.trim() ? secondary.trim() : undefined
+          );
           navigation.navigate('PermissionExplanation');
         }}
-        style={{ marginTop: 32 }}
-      />
+        accessibilityRole="button"
+        accessibilityLabel="Continue"
+      >
+        <Text style={styles.nextText}>Next</Text>
+      </Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#101A2C' },
-  title: { fontSize: 28, color: '#00BFFF', fontWeight: 'bold', marginBottom: 16 },
-  subtitle: { fontSize: 18, color: '#B0B8C1', marginBottom: 8 },
-  input: { width: 260, height: 44, backgroundColor: '#1A2336', color: '#fff', borderRadius: 8, paddingHorizontal: 12, marginBottom: 16, fontSize: 18 },
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.bg,
+    paddingHorizontal: 28,
+    paddingTop: 72,
+    paddingBottom: 48,
+    justifyContent: 'space-between',
+  },
+
+  header: {
+    marginBottom: 30,
+  },
+
+  title: {
+    fontFamily: 'SpaceGrotesk_600SemiBold',
+    fontSize: 26,
+    color: COLORS.softWhite,
+    marginBottom: 6,
+  },
+
+  subtitle: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 15,
+    lineHeight: 22,
+    color: COLORS.mutedText,
+  },
+
+  /* 🔑 WATERMARK CONTAINER */
+  formWrapper: {
+    position: 'relative',
+  },
+
+  languageImageWrapper: {
+  position: 'absolute',
+  top: -165,          // 🔑 image visible, not decapitated
+  left: -24,
+  right: -24,
+  alignItems: 'center',
+  zIndex: 0,
+  opacity: 0.6,
+},
+
+
+  languageImage: {
+    width: '120%',     // ⬅️ zoom
+    height: 190,
+  },
+
+  inputCard: {
+  backgroundColor: COLORS.cardBg,
+  borderRadius: 16,
+  padding: 16,
+  borderWidth: 1,
+  borderColor: COLORS.cardBorder,
+  marginBottom: 20,
+  zIndex: 2, // 🔑 cards hide lower image naturally
+},
+
+  inputLabel: {
+    fontFamily: 'Inter_500Medium',
+    fontSize: 13,
+    color: COLORS.mutedText,
+    marginBottom: 10,
+  },
+
+  optional: {
+    fontFamily: 'Inter_400Regular',
+    color: COLORS.mutedText,
+  },
+
+  input: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 16,
+    color: COLORS.softWhite,
+    paddingVertical: 6,
+  },
+
+  helper: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 13,
+    color: COLORS.mutedText,
+    marginTop: 2,
+  },
+
+  /* CTA */
+  nextButton: {
+    alignSelf: 'center',
+    backgroundColor: COLORS.neonBlue,
+    borderRadius: 28,
+    paddingVertical: 14,
+    paddingHorizontal: 56,
+    shadowColor: COLORS.neonBlue,
+    shadowOpacity: 0.45,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+
+  nextText: {
+    fontFamily: 'Inter_500Medium',
+    fontSize: 17,
+    color: '#0A0F2C',
+    letterSpacing: 0.4,
+  },
+  form: {
+    marginTop: 40,
+  },
 });
