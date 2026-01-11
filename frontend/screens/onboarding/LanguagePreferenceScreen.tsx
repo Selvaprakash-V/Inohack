@@ -6,6 +6,7 @@ import {
   TextInput,
   Pressable,
   Image,
+  ImageBackground,
 } from 'react-native';
 import { useOnboarding } from '../../context/OnboardingContext';
 
@@ -31,7 +32,11 @@ export default function LanguagePreferenceScreen({ navigation }: any) {
   const [secondary, setSecondary] = useState(secondaryLanguage || '');
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={require('../../assets/bg-placeholdr.png')}
+      style={styles.container}
+      resizeMode="cover"
+    >
       {/* HEADER */}
       <View style={styles.header}>
         <Text style={styles.title}>Language preferences</Text>
@@ -103,7 +108,7 @@ export default function LanguagePreferenceScreen({ navigation }: any) {
       >
         <Text style={styles.nextText}>Next</Text>
       </Pressable>
-    </View>
+    </ImageBackground>
   );
 }
 

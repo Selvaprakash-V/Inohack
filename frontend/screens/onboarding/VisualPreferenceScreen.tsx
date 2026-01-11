@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   Pressable,
+  ImageBackground,
 } from 'react-native';
 import { useOnboarding } from '../../context/OnboardingContext';
 
@@ -24,12 +25,14 @@ export default function VisualPreferenceScreen({ navigation }: any) {
   const isExtraLarge = textSize === 'extra-large';
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={require('../../assets/bg-placeholdr.png')}
+      style={styles.container}
+      resizeMode="cover"
+    >
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.title}>
-          Choose your text size
-        </Text>
+        <Text style={styles.title}>Choose your text size</Text>
         <Text style={styles.subtitle}>
           Pick what feels most comfortable to read.
         </Text>
@@ -37,12 +40,9 @@ export default function VisualPreferenceScreen({ navigation }: any) {
 
       {/* Cards */}
       <View style={styles.cardRow}>
-        {/* Large Text Card */}
+        {/* Large Text */}
         <Pressable
-          style={[
-            styles.card,
-            isLarge && styles.cardActive,
-          ]}
+          style={[styles.card, isLarge && styles.cardActive]}
           onPress={() => setTextSize('large')}
         >
           <Text
@@ -59,12 +59,9 @@ export default function VisualPreferenceScreen({ navigation }: any) {
           </Text>
         </Pressable>
 
-        {/* Extra Large Card */}
+        {/* Extra Large */}
         <Pressable
-          style={[
-            styles.card,
-            isExtraLarge && styles.cardActive,
-          ]}
+          style={[styles.card, isExtraLarge && styles.cardActive]}
           onPress={() => setTextSize('extra-large')}
         >
           <Text
@@ -98,7 +95,7 @@ export default function VisualPreferenceScreen({ navigation }: any) {
       >
         <Text style={styles.nextText}>Next</Text>
       </Pressable>
-    </View>
+    </ImageBackground>
   );
 }
 
@@ -138,7 +135,7 @@ const styles = StyleSheet.create({
 
   card: {
     width: '48%',
-    minHeight: 160, // ⬅ taller cards
+    minHeight: 160,
     backgroundColor: COLORS.cardBg,
     borderRadius: 18,
     padding: 18,
@@ -159,7 +156,7 @@ const styles = StyleSheet.create({
   },
 
   cardTitleActive: {
-    color: COLORS.neonPurple, // ⬅ selection feedback lives here
+    color: COLORS.neonPurple,
   },
 
   sampleLarge: {

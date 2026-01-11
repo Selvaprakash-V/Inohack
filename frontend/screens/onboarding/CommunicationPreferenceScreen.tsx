@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Pressable,
   Image,
+  ImageBackground,
 } from 'react-native';
 import { useOnboarding } from '../../context/OnboardingContext';
 
@@ -25,10 +26,15 @@ const IMAGES = {
 };
 
 export default function CommunicationPreferenceScreen({ navigation }: any) {
-  const { communicationPreference, setCommunicationPreference } = useOnboarding();
+  const { communicationPreference, setCommunicationPreference } =
+    useOnboarding();
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={require('../../assets/bg-placeholdr.png')}
+      style={styles.container}
+      resizeMode="cover"
+    >
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.title}>
@@ -49,11 +55,10 @@ export default function CommunicationPreferenceScreen({ navigation }: any) {
           ]}
           onPress={() => setCommunicationPreference('text')}
         >
-          <View style={styles.imageLayer}>
+          <View style={styles.imageLayer} pointerEvents="none">
             <Image
               source={IMAGES.text}
               style={styles.contextImage}
-              resizeMode="contain"
             />
           </View>
 
@@ -61,7 +66,8 @@ export default function CommunicationPreferenceScreen({ navigation }: any) {
             <Text
               style={[
                 styles.cardTitle,
-                communicationPreference === 'text' && styles.cardTitleActive,
+                communicationPreference === 'text' &&
+                  styles.cardTitleActive,
               ]}
             >
               Text
@@ -80,11 +86,10 @@ export default function CommunicationPreferenceScreen({ navigation }: any) {
           ]}
           onPress={() => setCommunicationPreference('sign')}
         >
-          <View style={styles.imageLayer}>
+          <View style={styles.imageLayer} pointerEvents="none">
             <Image
               source={IMAGES.sign}
               style={styles.contextImage}
-              resizeMode="contain"
             />
           </View>
 
@@ -92,7 +97,8 @@ export default function CommunicationPreferenceScreen({ navigation }: any) {
             <Text
               style={[
                 styles.cardTitle,
-                communicationPreference === 'sign' && styles.cardTitleActive,
+                communicationPreference === 'sign' &&
+                  styles.cardTitleActive,
               ]}
             >
               Sign Language
@@ -112,11 +118,10 @@ export default function CommunicationPreferenceScreen({ navigation }: any) {
         ]}
         onPress={() => setCommunicationPreference('both')}
       >
-        <View style={styles.imageLayer}>
+        <View style={styles.imageLayer} pointerEvents="none">
           <Image
             source={IMAGES.both}
             style={styles.contextImageWide}
-            resizeMode="contain"
           />
         </View>
 
@@ -124,7 +129,8 @@ export default function CommunicationPreferenceScreen({ navigation }: any) {
           <Text
             style={[
               styles.cardTitle,
-              communicationPreference === 'both' && styles.cardTitleActive,
+              communicationPreference === 'both' &&
+                styles.cardTitleActive,
             ]}
           >
             Both
@@ -145,7 +151,7 @@ export default function CommunicationPreferenceScreen({ navigation }: any) {
       >
         <Text style={styles.nextText}>Next</Text>
       </Pressable>
-    </View>
+    </ImageBackground>
   );
 }
 
@@ -180,7 +186,6 @@ const styles = StyleSheet.create({
   grid: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    rowGap: 16,
   },
 
   card: {
@@ -210,29 +215,27 @@ const styles = StyleSheet.create({
   },
 
   imageLayer: {
-  position: 'absolute',
-  top: -50,        // 🔑 bleed outside
-  left: -40,
-  right: -40,
-  bottom: -40,
-  justifyContent: 'center',
-  alignItems: 'center',
-  opacity: 0.22,
-},
-
+    position: 'absolute',
+    top: -50,
+    left: -40,
+    right: -40,
+    bottom: -40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    opacity: 0.25,
+  },
 
   contextImage: {
-  width: '160%',      // 🔍 aggressive zoom
-  height: '160%',
-  resizeMode: 'cover', // 🔥 THIS is critical
-},
+    width: '160%',
+    height: '160%',
+    resizeMode: 'cover',
+  },
 
-contextImageWide: {
-  width: '140%',
-  height: '140%',
-  resizeMode: 'cover',
-},
-
+  contextImageWide: {
+    width: '140%',
+    height: '140%',
+    resizeMode: 'cover',
+  },
 
   cardContent: {
     flex: 1,

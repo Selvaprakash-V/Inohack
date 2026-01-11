@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Pressable,
   Image,
+  ImageBackground,
 } from 'react-native';
 import { useOnboarding } from '../../context/OnboardingContext';
 
@@ -54,7 +55,11 @@ export default function UsageContextScreen({ navigation }: any) {
   };
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={require('../../assets/bg-placeholdr.png')}
+      style={styles.container}
+      resizeMode="cover"
+    >
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.title}>Where will you use OneVoice?</Text>
@@ -117,7 +122,7 @@ export default function UsageContextScreen({ navigation }: any) {
       >
         <Text style={styles.nextText}>Next</Text>
       </Pressable>
-    </View>
+    </ImageBackground>
   );
 }
 

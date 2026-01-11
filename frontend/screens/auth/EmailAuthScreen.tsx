@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
+  Animated,
 } from 'react-native';
 
 const COLORS = {
@@ -17,13 +18,78 @@ const COLORS = {
   mutedText: '#A9B7D0',
   inputBg: 'rgba(255,255,255,0.06)',
   border: 'rgba(255,255,255,0.12)',
+  success: '#4CAF50',
+  error: '#FF6B6B',
 };
 
 export default function EmailAuthScreen({ navigation }: any) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [submitted, setSubmitted] = useState(false);
 
-  const canContinue = email.length > 0 && password.length >= 8;
+  /* ───────── Validation ───────── */
+
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const hasMinLength = password.length >= 8;
+  const hasUppercase = /[A-Z]/.test(password);
+  const hasSymbol = /[^A-Za-z0-9]/.test(password);
+  const passwordsMatch =
+    password.length > 0 && password === confirmPassword;
+
+  const allValid =
+    emailValid &&
+    hasMinLength &&
+    hasUppercase &&
+    hasSymbol &&
+    passwordsMatch;
+
+  /* ───────── Shake animation ───────── */
+
+  const shakeAnim = useRef(new Animated.Value(0)).current;
+
+  const triggerShake = () => {
+    shakeAnim.setValue(0);
+    Animated.sequence([
+      Animated.timing(shakeAnim, {
+        toValue: 1,
+        duration: 60,
+        useNativeDriver: true,
+      }),
+      Animated.timing(shakeAnim, {
+        toValue: -1,
+        duration: 60,
+        useNativeDriver: true,
+      }),
+      Animated.timing(shakeAnim, {
+        toValue: 1,
+        duration: 60,
+        useNativeDriver: true,
+      }),
+      Animated.timing(shakeAnim, {
+        toValue: 0,
+        duration: 60,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  const ruleColor = (ok: boolean) => {
+    if (!submitted) return COLORS.mutedText;
+    return ok ? COLORS.success : COLORS.error;
+  };
+
+  const handleContinue = () => {
+    setSubmitted(true);
+
+    if (!allValid) {
+      triggerShake();
+      return;
+    }
+
+    console.log('All validations passed. Proceed with auth.');
+    // navigation.replace('Home') later
+  };
 
   return (
     <KeyboardAvoidingView
@@ -35,7 +101,7 @@ export default function EmailAuthScreen({ navigation }: any) {
         <View style={styles.header}>
           <Text style={styles.title}>Continue with email</Text>
           <Text style={styles.subtitle}>
-            Your email is used to securely save your preferences and communication data.
+            Your email securely stores your preferences and communication data.
           </Text>
         </View>
 
@@ -50,7 +116,6 @@ export default function EmailAuthScreen({ navigation }: any) {
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
-            accessibilityLabel="Email address"
           />
 
           <TextInput
@@ -60,42 +125,73 @@ export default function EmailAuthScreen({ navigation }: any) {
             value={password}
             onChangeText={setPassword}
             secureTextEntry
-            accessibilityLabel="Password"
           />
 
-          <Text style={styles.helper}>
-            Minimum 8 characters
-          </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Confirm password"
+            placeholderTextColor={COLORS.mutedText}
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry
+          />
+
+          {/* Rules */}
+          <View style={styles.rules}>
+            {[
+              { ok: hasMinLength, text: 'Minimum 8 characters' },
+              { ok: hasUppercase, text: 'At least one uppercase letter' },
+              { ok: hasSymbol, text: 'At least one symbol' },
+              { ok: passwordsMatch, text: 'Passwords match' },
+              { ok: emailValid, text: 'Valid email address' },
+            ].map((rule, index) => (
+              <Animated.Text
+                key={index}
+                style={[
+                  styles.rule,
+                  {
+                    color: ruleColor(rule.ok),
+                    transform: [
+                      {
+                        translateX:
+                          submitted && !rule.ok
+                            ? shakeAnim.interpolate({
+                                inputRange: [-1, 1],
+                                outputRange: [-6, 6],
+                              })
+                            : 0,
+                      },
+                    ],
+                  },
+                ]}
+              >
+                • {rule.text}
+              </Animated.Text>
+            ))}
+          </View>
         </View>
 
         {/* CTA */}
         <View style={styles.footer}>
           <Pressable
-            style={[
+            style={({ pressed }) => [
               styles.cta,
-              !canContinue && { opacity: 0.4 },
+              pressed && { opacity: 0.85 },
             ]}
-            onPress={() => {
-              console.log('Email auth continue pressed (placeholder)');
-              // Later:
-              // 1. Firebase email/password auth
-              // 2. Send onboarding context to backend
-            }}
-            disabled={!canContinue}
-            accessibilityRole="button"
-            accessibilityLabel="Continue"
+            onPress={handleContinue}
           >
             <Text style={styles.ctaText}>Continue</Text>
           </Pressable>
 
           <Text style={styles.legal}>
-            By continuing, your data is stored securely and never shared without consent.
+            Your data is encrypted and never shared without consent.
           </Text>
         </View>
       </View>
     </KeyboardAvoidingView>
   );
 }
+/* ───────── Styles ───────── */
 
 const styles = StyleSheet.create({
   container: {
@@ -142,12 +238,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_400Regular',
   },
 
-  helper: {
-    fontSize: 13,
-    color: COLORS.mutedText,
+  rules: {
+    marginTop: 6,
     marginLeft: 4,
-    marginTop: 2,
+  },
+
+  rule: {
     fontFamily: 'Inter_400Regular',
+    fontSize: 13,
+    lineHeight: 20,
   },
 
   footer: {
@@ -174,10 +273,10 @@ const styles = StyleSheet.create({
   },
 
   legal: {
+    fontFamily: 'Inter_400Regular',
     fontSize: 12,
     color: COLORS.mutedText,
     textAlign: 'center',
     maxWidth: '90%',
-    fontFamily: 'Inter_400Regular',
   },
 });

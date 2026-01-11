@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   Pressable,
+  ImageBackground,
 } from 'react-native';
 import { useOnboarding } from '../../context/OnboardingContext';
 
@@ -21,7 +22,11 @@ export default function PermissionExplanationScreen({ navigation }: any) {
   const { setPermissionsExplained } = useOnboarding();
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={require('../../assets/bg-placeholdr.png')}
+      style={styles.container}
+      resizeMode="cover"
+    >
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.title}>Permissions & Privacy</Text>
@@ -45,13 +50,14 @@ export default function PermissionExplanationScreen({ navigation }: any) {
 
         <PermissionCard
           title="Storage"
-          description="Used to save your transcripts and preferences securely on your device."
+          description="Used to save transcripts and preferences securely on your device."
         />
       </View>
 
-      {/* Footer text */}
+      {/* Footer note */}
       <Text style={styles.footerNote}>
-        You can change or revoke these permissions anytime from your device settings.
+        You can change or revoke these permissions anytime from your device
+        settings.
       </Text>
 
       {/* CTA */}
@@ -69,11 +75,11 @@ export default function PermissionExplanationScreen({ navigation }: any) {
       >
         <Text style={styles.nextText}>Continue to Login</Text>
       </Pressable>
-    </View>
+    </ImageBackground>
   );
 }
 
-/* Small reusable card */
+/* Reusable permission card */
 function PermissionCard({
   title,
   description,

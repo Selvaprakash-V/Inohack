@@ -1,4 +1,6 @@
 import React from 'react';
+
+import EmailAuthScreen from '../screens/auth/EmailAuthScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import WelcomeScreen from '../screens/onboarding/WelcomeScreen';
@@ -24,6 +26,7 @@ export default function AppNavigator() {
           <Stack.Screen name="LanguagePreference" component={LanguagePreferenceScreen} />
           <Stack.Screen name="PermissionExplanation" component={PermissionExplanationScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="EmailAuth" component={EmailAuthScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </OnboardingProvider>
