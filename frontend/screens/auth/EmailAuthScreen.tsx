@@ -1,4 +1,7 @@
 import React, { useState, useRef } from 'react';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../services/firebase';
+import { logUid } from '../../services/logUid';
 import {
   View,
   Text,
@@ -27,6 +30,8 @@ export default function EmailAuthScreen({ navigation }: any) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [firebaseSuccess, setFirebaseSuccess] = useState(false);
+  const [firebaseError, setFirebaseError] = useState<string | null>(null);
 
   /* ───────── Validation ───────── */
 
@@ -79,16 +84,24 @@ export default function EmailAuthScreen({ navigation }: any) {
     return ok ? COLORS.success : COLORS.error;
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     setSubmitted(true);
-
+    setFirebaseError(null);
+    setFirebaseSuccess(false);
     if (!allValid) {
       triggerShake();
       return;
     }
-
-    console.log('All validations passed. Proceed with auth.');
-    // navigation.replace('Home') later
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      logUid(userCredential.user.uid);
+      setFirebaseSuccess(true);
+      setTimeout(() => {
+        navigation.replace('PrimaryAction');
+      }, 1200);
+    } catch (err: any) {
+      setFirebaseError(err.message || 'Failed to create user');
+    }
   };
 
   return (
@@ -169,6 +182,12 @@ export default function EmailAuthScreen({ navigation }: any) {
               </Animated.Text>
             ))}
           </View>
+          {firebaseError && (
+            <Text style={{ color: COLORS.error, marginTop: 10, textAlign: 'center' }}>{firebaseError}</Text>
+          )}
+          {firebaseSuccess && (
+            <Text style={{ color: COLORS.success, marginTop: 10, textAlign: 'center' }}>Account successfully created!</Text>
+          )}
         </View>
 
         {/* CTA */}

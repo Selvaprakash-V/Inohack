@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>617216950786-t9fah2mbgioc6or2eh1fk3p8ml9573q3.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.617216950786-t9fah2mbgioc6or2eh1fk3p8ml9573q3</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDZgRq9Pzt2UjSzolyTakOuRhV5obM5ZSk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>617216950786</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.innovaid.OneVoice</string>
+	<key>PROJECT_ID</key>
+	<string>event-d540a</string>
+	<key>STORAGE_BUCKET</key>
+	<string>event-d540a.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:617216950786:ios:efc3716f52713f4cd69d1b</string>
+	<key>DATABASE_URL</key>
+	<string>https://event-d540a-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+</dict>
+</plist>
