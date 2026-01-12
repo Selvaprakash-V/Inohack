@@ -1,3 +1,11 @@
+// Type for onboarding data to send to backend (without setter functions)
+export type OnboardingData = {
+  textSize: TextSize;
+  communicationPreference: CommunicationPreference;
+  usageContexts: UsageContext[];
+  primaryLanguage: string;
+  secondaryLanguage?: string;
+};
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 type TextSize = 'large' | 'extra-large';
