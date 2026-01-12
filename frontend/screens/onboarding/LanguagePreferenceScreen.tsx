@@ -8,6 +8,7 @@ import {
   Image,
   ImageBackground,
 } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { useOnboarding } from '../../context/OnboardingContext';
 
 const COLORS = {
@@ -30,6 +31,21 @@ export default function LanguagePreferenceScreen({ navigation }: any) {
 
   const [primary, setPrimary] = useState(primaryLanguage || '');
   const [secondary, setSecondary] = useState(secondaryLanguage || '');
+
+  const indianLanguages = [
+    'Hindi',
+    'Bengali',
+    'Telugu',
+    'Marathi',
+    'Tamil',
+    'Urdu',
+    'Gujarati',
+    'Kannada',
+    'Odia',
+    'Malayalam',
+    'Punjabi',
+    'Assamese',
+  ];
 
   return (
     <ImageBackground
@@ -72,16 +88,21 @@ export default function LanguagePreferenceScreen({ navigation }: any) {
         {/* SECONDARY LANGUAGE */}
         <View style={styles.inputCard}>
           <Text style={styles.inputLabel}>
-            Secondary language{' '}
-            <Text style={styles.optional}>(optional)</Text>
+            Secondary language <Text style={styles.optional}>(optional)</Text>
           </Text>
-          <TextInput
-            value={secondary}
-            onChangeText={setSecondary}
-            placeholder="Add another language"
-            placeholderTextColor={COLORS.mutedText}
-            style={styles.input}
-          />
+          <View style={styles.pickerWrapper}>
+            <Picker
+              selectedValue={secondary}
+              onValueChange={(itemValue: string) => setSecondary(itemValue)}
+              style={styles.picker}
+              dropdownIconColor={COLORS.softWhite}
+            >
+              <Picker.Item label="Select a language" value="" color={COLORS.mutedText} />
+              {indianLanguages.map(lang => (
+                <Picker.Item key={lang} label={lang} value={lang} color={COLORS.softWhite} />
+              ))}
+            </Picker>
+          </View>
         </View>
 
         {/* HELPER */}
@@ -195,6 +216,21 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: COLORS.mutedText,
     marginTop: 2,
+  },
+
+  pickerWrapper: {
+    backgroundColor: COLORS.cardBg,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: COLORS.cardBorder,
+    overflow: 'hidden',
+  },
+  picker: {
+    color: COLORS.softWhite,
+    fontFamily: 'Inter_400Regular',
+    fontSize: 16,
+    height: 44,
+    width: '100%',
   },
 
   /* CTA */
