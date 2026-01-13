@@ -8,6 +8,7 @@ npx ts-node src/app.ts  # or use nodemon for dev
 cd frontend
 npm install
 npm start  # or expo start
+npm install expo-av  # Install expo-av for video playback
 
 # Environment setup
 # Add your .env files in both backend and frontend as needed

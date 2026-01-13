@@ -13,8 +13,22 @@ import PermissionExplanationScreen from '../screens/onboarding/PermissionExplana
 import LoginScreen from '../screens/auth/LoginScreen';
 import { OnboardingProvider } from '../context/OnboardingContext';
 import { auth } from '../services/firebase';
+import WelcomeGestureScreen from '../screens/app/WelcomeGestureScreen';
 
 const Stack = createNativeStackNavigator();
+
+export type RootParamList = {
+  Welcome: undefined;
+  Login: undefined;
+  EmailAuth: undefined;
+  VisualPreferenceScreen: undefined; // Correct screen name
+  CommunicationPreference: undefined;
+  UsageContext: undefined;
+  LanguagePreference: undefined;
+  PermissionExplanation: undefined;
+  WelcomeGesture: undefined;
+  MainApp: undefined;
+};
 
 export default function AppNavigator() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!auth?.currentUser);
@@ -31,18 +45,20 @@ export default function AppNavigator() {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           {isLoggedIn ? (
-            <Stack.Screen name="MainApp" component={MainAppScreen} />
+            <>
+              <Stack.Screen name="VisualPreferenceScreen" component={VisualPreferenceScreen} />
+              <Stack.Screen name="CommunicationPreference" component={CommunicationPreferenceScreen} />
+              <Stack.Screen name="UsageContext" component={UsageContextScreen} />
+              <Stack.Screen name="LanguagePreference" component={LanguagePreferenceScreen} />
+              <Stack.Screen name="PermissionExplanation" component={PermissionExplanationScreen} />
+              <Stack.Screen name="WelcomeGesture" component={WelcomeGestureScreen} />
+              <Stack.Screen name="MainApp" component={MainAppScreen} />
+            </>
           ) : (
             <>
               <Stack.Screen name="Welcome" component={WelcomeScreen} />
               <Stack.Screen name="Login" component={LoginScreen} />
               <Stack.Screen name="EmailAuth" component={EmailAuthScreen} />
-              <Stack.Screen name="VisualPreference" component={VisualPreferenceScreen} />
-              <Stack.Screen name="CommunicationPreference" component={CommunicationPreferenceScreen} />
-              <Stack.Screen name="UsageContext" component={UsageContextScreen} />
-              <Stack.Screen name="LanguagePreference" component={LanguagePreferenceScreen} />
-              <Stack.Screen name="PermissionExplanation" component={PermissionExplanationScreen} />
-              <Stack.Screen name="MainApp" component={MainAppScreen} />
             </>
           )}
         </Stack.Navigator>

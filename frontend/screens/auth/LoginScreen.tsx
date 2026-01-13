@@ -43,7 +43,7 @@ export default function LoginScreen({ navigation }: any) {
     setError(null);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      // Navigation will auto-redirect to MainApp on auth state change
+      navigation.replace('WelcomeGesture'); // Navigate to WelcomeGestureScreen after login
     } catch (err: any) {
       setError(err.message || 'Failed to sign in');
     }
@@ -128,14 +128,14 @@ export default function LoginScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   // ...existing code...
   input: {
-    backgroundColor: COLORS.inputBg,
+    backgroundColor: COLORS.neonBlue,
     borderRadius: 14,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
     color: COLORS.softWhite,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    
     marginBottom: 14,
     fontFamily: 'Inter_400Regular',
   },
