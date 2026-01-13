@@ -1,5 +1,6 @@
 import { auth } from './firebase';
 import { OnboardingData } from '../context/OnboardingContext';
+import { BACKEND_URL } from '@env';
 
 export async function storeOnboardingData(onboarding: OnboardingData) {
   const user = auth?.currentUser;
@@ -17,7 +18,9 @@ export async function storeOnboardingData(onboarding: OnboardingData) {
     },
   };
 
-  const response = await fetch('http://localhost:4000/onboarding', {
+  const baseUrl = BACKEND_URL || 'http://localhost:4000';
+
+  const response = await fetch(`${baseUrl}/onboarding`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
