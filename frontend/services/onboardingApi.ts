@@ -1,9 +1,8 @@
-import { getAuth } from 'firebase/auth';
+import { auth } from './firebase';
 import { OnboardingData } from '../context/OnboardingContext';
 
 export async function storeOnboardingData(onboarding: OnboardingData) {
-  const auth = getAuth();
-  const user = auth.currentUser;
+  const user = auth?.currentUser;
   if (!user) throw new Error('No authenticated user');
 
   const payload = {

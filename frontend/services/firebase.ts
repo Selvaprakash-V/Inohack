@@ -1,6 +1,5 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { 
   FIREBASE_API_KEY, 
   FIREBASE_AUTH_DOMAIN, 
@@ -19,5 +18,17 @@ const firebaseConfig = {
   appId: FIREBASE_APP_ID,
 };
 
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+let app: any;
+let auth: any;
+
+try {
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+} catch (error: any) {
+  // Firebase already initialized
+  if (error.code !== 'app/duplicate-app') {
+    console.warn('Firebase initialization:', error.message);
+  }
+}
+
+export { app, auth };
