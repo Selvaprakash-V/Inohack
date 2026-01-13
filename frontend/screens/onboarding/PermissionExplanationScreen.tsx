@@ -68,12 +68,12 @@ export default function PermissionExplanationScreen({ navigation }: any) {
         ]}
         onPress={() => {
           setPermissionsExplained(true);
-          navigation.navigate('Login');
+          navigation.replace('MainApp');
         }}
         accessibilityRole="button"
-        accessibilityLabel="Continue to login"
+        accessibilityLabel="Continue to main app"
       >
-        <Text style={styles.nextText}>Continue to Login</Text>
+        <Text style={styles.nextText}>Continue</Text>
       </Pressable>
     </ImageBackground>
   );

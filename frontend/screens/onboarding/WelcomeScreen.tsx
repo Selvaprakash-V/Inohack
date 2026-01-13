@@ -89,7 +89,7 @@ export default function WelcomeScreen({ navigation }: { navigation: any }) {
               styles.cta,
               pressed && { opacity: 0.85 },
             ]}
-            onPress={() => navigation.navigate('VisualPreference')}
+            onPress={() => navigation.navigate('Login')}
             accessibilityRole="button"
             accessibilityLabel="Get started"
           >
