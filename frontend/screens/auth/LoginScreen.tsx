@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
+  TextInput,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -15,7 +16,15 @@ const COLORS = {
   mutedText: '#A9B7D0',
 };
 
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../services/firebase';
+
 export default function LoginScreen({ navigation }: any) {
+  const [showEmailSignIn, setShowEmailSignIn] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
   const handleGoogleLogin = () => {
     console.log('Google login pressed (placeholder)');
     // later: Firebase Google Auth
@@ -23,6 +32,21 @@ export default function LoginScreen({ navigation }: any) {
 
   const handleEmailLogin = () => {
     navigation.navigate('EmailAuth');
+  };
+
+  const handleShowEmailSignIn = () => {
+    setShowEmailSignIn(true);
+    setError(null);
+  };
+
+  const handleEmailSignIn = async () => {
+    setError(null);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      // Navigation will auto-redirect to MainApp on auth state change
+    } catch (err: any) {
+      setError(err.message || 'Failed to sign in');
+    }
   };
 
   return (
@@ -57,13 +81,81 @@ export default function LoginScreen({ navigation }: any) {
 
       {/* Email */}
       <Pressable onPress={handleEmailLogin}>
-        <Text style={styles.emailText}>Use email instead</Text>
+        <Text style={styles.emailText}>Sign up with email</Text>
       </Pressable>
+
+      <Pressable onPress={handleShowEmailSignIn} style={{ marginTop: 18 }}>
+        <Text style={[styles.emailText, { color: COLORS.neonBlue }]}>Sign in with email & password</Text>
+      </Pressable>
+
+      {showEmailSignIn && (
+        <View style={{ marginTop: 28 }}>
+          <TextInput
+            style={styles.input}
+            placeholder="Email address"
+            placeholderTextColor={COLORS.mutedText}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor={COLORS.mutedText}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+          {error && <Text style={{ color: COLORS.neonPurple, marginTop: 6 }}>{error}</Text>}
+          <Pressable
+            style={({ pressed }) => [
+              styles.cta,
+              pressed && { opacity: 0.85 },
+              { marginTop: 10 },
+            ]}
+            onPress={handleEmailSignIn}
+          >
+            <Text style={styles.ctaText}>Sign in</Text>
+          </Pressable>
+        </View>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  // ...existing code...
+  input: {
+    backgroundColor: COLORS.inputBg,
+    borderRadius: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    fontSize: 16,
+    color: COLORS.softWhite,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    marginBottom: 14,
+    fontFamily: 'Inter_400Regular',
+  },
+  cta: {
+    backgroundColor: COLORS.neonBlue,
+    borderRadius: 28,
+    paddingVertical: 14,
+    paddingHorizontal: 56,
+    shadowColor: COLORS.neonBlue,
+    shadowOpacity: 0.5,
+    shadowRadius: 14,
+    elevation: 8,
+    marginBottom: 8,
+  },
+  ctaText: {
+    fontFamily: 'Inter_500Medium',
+    fontSize: 17,
+    color: '#0A0F2C',
+    letterSpacing: 0.4,
+  },
   container: {
     flex: 1,
     backgroundColor: COLORS.bg,

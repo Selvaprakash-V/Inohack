@@ -99,7 +99,7 @@ export default function LanguagePreferenceScreen({ navigation }: any) {
             >
               <Picker.Item label="Select a language" value="" color={COLORS.mutedText} />
               {indianLanguages.map(lang => (
-                <Picker.Item key={lang} label={lang} value={lang} color={COLORS.softWhite} />
+                <Picker.Item key={lang} label={lang} value={lang} color={COLORS.neonPurple} />
               ))}
             </Picker>
           </View>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import EmailAuthScreen from '../screens/auth/EmailAuthScreen';
 import MainAppScreen from '../screens/app/MainAppScreen';
@@ -17,7 +17,14 @@ import { auth } from '../services/firebase';
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
-  const isLoggedIn = !!auth?.currentUser;
+  const [isLoggedIn, setIsLoggedIn] = useState(!!auth?.currentUser);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged
+      ? auth.onAuthStateChanged((user: any) => setIsLoggedIn(!!user))
+      : () => {};
+    return unsubscribe;
+  }, []);
 
   return (
     <OnboardingProvider>

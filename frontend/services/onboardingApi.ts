@@ -13,8 +13,10 @@ export async function storeOnboardingData(onboarding: OnboardingData) {
       communicationPreference: onboarding.communicationPreference,
       usageContexts: onboarding.usageContexts,
       primaryLanguage: onboarding.primaryLanguage,
-      // Backend schema requires secondaryLanguage, so send empty string when undefined
-      secondaryLanguage: onboarding.secondaryLanguage ?? '',
+      // Backend schema requires secondaryLanguage, so send 'None' if empty or undefined
+      secondaryLanguage: onboarding.secondaryLanguage && onboarding.secondaryLanguage.trim() !== ''
+        ? onboarding.secondaryLanguage
+        : 'None',
     },
   };
 
