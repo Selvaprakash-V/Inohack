@@ -12,7 +12,8 @@ export async function storeOnboardingData(onboarding: OnboardingData) {
       communicationPreference: onboarding.communicationPreference,
       usageContexts: onboarding.usageContexts,
       primaryLanguage: onboarding.primaryLanguage,
-      secondaryLanguage: onboarding.secondaryLanguage,
+      // Backend schema requires secondaryLanguage, so send empty string when undefined
+      secondaryLanguage: onboarding.secondaryLanguage ?? '',
     },
   };
 

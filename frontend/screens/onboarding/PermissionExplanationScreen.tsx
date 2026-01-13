@@ -7,6 +7,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import { useOnboarding } from '../../context/OnboardingContext';
+import { storeOnboardingData } from '../../services/onboardingApi';
 
 const COLORS = {
   bg: '#0A0F2C',
@@ -19,7 +20,31 @@ const COLORS = {
 };
 
 export default function PermissionExplanationScreen({ navigation }: any) {
-  const { setPermissionsExplained } = useOnboarding();
+  const {
+    textSize,
+    communicationPreference,
+    usageContexts,
+    primaryLanguage,
+    secondaryLanguage,
+    setPermissionsExplained,
+  } = useOnboarding();
+
+  const handleContinue = async () => {
+    try {
+      await storeOnboardingData({
+        textSize,
+        communicationPreference,
+        usageContexts,
+        primaryLanguage,
+        secondaryLanguage,
+      });
+    } catch (error) {
+      console.warn('Failed to store onboarding data', error);
+    }
+
+    setPermissionsExplained(true);
+    navigation.replace('MainApp');
+  };
 
   return (
     <ImageBackground
@@ -66,10 +91,7 @@ export default function PermissionExplanationScreen({ navigation }: any) {
           styles.nextButton,
           pressed && { opacity: 0.88 },
         ]}
-        onPress={() => {
-          setPermissionsExplained(true);
-          navigation.replace('MainApp');
-        }}
+        onPress={handleContinue}
         accessibilityRole="button"
         accessibilityLabel="Continue to main app"
       >
