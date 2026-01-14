@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import EmailAuthScreen from '../screens/auth/EmailAuthScreen';
+import MainAppScreen from '../screens/app/MainAppScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import WelcomeScreen from '../screens/onboarding/WelcomeScreen';
@@ -11,22 +12,44 @@ import LanguagePreferenceScreen from '../screens/onboarding/LanguagePreferenceSc
 import PermissionExplanationScreen from '../screens/onboarding/PermissionExplanationScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import { OnboardingProvider } from '../context/OnboardingContext';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../services/firebase';
 
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      setIsLoggedIn(!!user);
+      setCheckingAuth(false);
+    });
+    return unsub;
+  }, []);
+
+  if (checkingAuth) return null; // Optionally show splash
+
   return (
     <OnboardingProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Welcome" component={WelcomeScreen} />
-          <Stack.Screen name="VisualPreference" component={VisualPreferenceScreen} />
-          <Stack.Screen name="CommunicationPreference" component={CommunicationPreferenceScreen} />
-          <Stack.Screen name="UsageContext" component={UsageContextScreen} />
-          <Stack.Screen name="LanguagePreference" component={LanguagePreferenceScreen} />
-          <Stack.Screen name="PermissionExplanation" component={PermissionExplanationScreen} />
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="EmailAuth" component={EmailAuthScreen} />
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          {isLoggedIn ? (
+            <Stack.Screen name="MainApp" component={MainAppScreen} />
+          ) : (
+            <>
+              <Stack.Screen name="Welcome" component={WelcomeScreen} />
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="VisualPreference" component={VisualPreferenceScreen} />
+              <Stack.Screen name="CommunicationPreference" component={CommunicationPreferenceScreen} />
+              <Stack.Screen name="UsageContext" component={UsageContextScreen} />
+              <Stack.Screen name="LanguagePreference" component={LanguagePreferenceScreen} />
+              <Stack.Screen name="PermissionExplanation" component={PermissionExplanationScreen} />
+              <Stack.Screen name="EmailAuth" component={EmailAuthScreen} />
+              <Stack.Screen name="MainApp" component={MainAppScreen} />
+            </>
+          )}
         </Stack.Navigator>
       </NavigationContainer>
     </OnboardingProvider>

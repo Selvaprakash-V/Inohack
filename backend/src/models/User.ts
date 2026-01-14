@@ -24,20 +24,26 @@ const OnboardingSchema: Schema = new Schema({
   secondaryLanguage: { type: String, required: true },
 });
 
+
 const UserSchema: Schema = new Schema({
-  uid: { type: String, required: true, unique: true },
+  uid: { type: String, required: true, unique: true, index: true },
   onboarding: { type: OnboardingSchema, required: true },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   // Future fields: preferences, personalization, aiEmbeddings, etc.
 });
 
-UserSchema.pre<IUser>('save', function (next) {
-  this.updatedAt = new Date();
-  if (!this.createdAt) {
-    this.createdAt = new Date();
-  }
-  next();
+// Create indexes for onboarding options for analytics and fast lookup
+UserSchema.index({
+  'onboarding.textSize': 1,
+  'onboarding.communicationPreference': 1,
+  'onboarding.usageContexts': 1,
+  'onboarding.primaryLanguage': 1,
+  'onboarding.secondaryLanguage': 1,
+  uid: 1
 });
 
-export default mongoose.model<IUser>('User', UserSchema);
+
+
+
+export default mongoose.model<IUser>('User', UserSchema, 'onboarding');

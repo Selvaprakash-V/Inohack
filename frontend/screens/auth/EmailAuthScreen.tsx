@@ -97,7 +97,7 @@ export default function EmailAuthScreen({ navigation }: any) {
       logUid(userCredential.user.uid);
       setFirebaseSuccess(true);
       setTimeout(() => {
-        navigation.replace('PrimaryAction');
+        navigation.replace('VisualPreference');
       }, 1200);
     } catch (err: any) {
       setFirebaseError(err.message || 'Failed to create user');
