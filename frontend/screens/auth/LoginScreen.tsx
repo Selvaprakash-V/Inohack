@@ -18,6 +18,7 @@ const COLORS = {
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../services/firebase';
+import { checkUidInMongoDB, saveUidToMongoDB } from '../../services/onboardingApi';
 
 export default function LoginScreen({ navigation }: any) {
   const [showEmailSignIn, setShowEmailSignIn] = useState(false);
@@ -42,8 +43,16 @@ export default function LoginScreen({ navigation }: any) {
   const handleEmailSignIn = async () => {
     setError(null);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigation.replace('WelcomeGesture'); // Navigate to WelcomeGestureScreen after login
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const uid = userCredential.user.uid;
+
+      const uidExists = await checkUidInMongoDB(uid);
+      if (uidExists) {
+        navigation.replace('WelcomeGesture'); // Navigate to WelcomeGesture if uid exists
+      } else {
+        await saveUidToMongoDB(uid); // Save uid to MongoDB
+        navigation.navigate('CollectDetails'); // Navigate to a screen to collect details
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to sign in');
     }
@@ -126,7 +135,6 @@ export default function LoginScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  // ...existing code...
   input: {
     backgroundColor: COLORS.neonBlue,
     borderRadius: 14,

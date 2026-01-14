@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
-import { Video, ResizeMode } from 'expo-av';
+import Video from 'react-native-video';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootParamList } from '../../navigation/AppNavigator';
 
@@ -27,9 +27,9 @@ export default function WelcomeGestureScreen() {
       <Video
         source={require('../../assets/welcomegesture.mp4')}
         style={styles.video}
-        resizeMode={"contain" as ResizeMode} // Explicitly cast to ResizeMode
-        shouldPlay
-        isLooping={false}
+        resizeMode="contain"
+        repeat={false}
+        paused={false}
       />
       <Animated.View style={[styles.textContainer, { opacity: fadeAnim }]}>
         <Text style={styles.header}>OneVoice</Text>

@@ -43,7 +43,7 @@ export default function PermissionExplanationScreen({ navigation }: any) {
     }
 
     setPermissionsExplained(true);
-    navigation.replace('WelcomeGesture'); // Navigate to WelcomeGestureScreen
+    navigation.replace('WelcomeGesture'); // Navigate to WelcomeGesture
   };
 
   return (

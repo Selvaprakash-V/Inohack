@@ -36,3 +36,38 @@ export async function storeOnboardingData(onboarding: OnboardingData) {
 
   return await response.json();
 }
+
+export async function checkUidInMongoDB(uid: string): Promise<boolean> {
+  const baseUrl = BACKEND_URL || 'http://localhost:4000';
+
+  const response = await fetch(`${baseUrl}/check-uid`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ uid }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to check UID in MongoDB');
+  }
+
+  const data = await response.json();
+  return data.exists; // Assume the backend returns { exists: boolean }
+}
+
+export async function saveUidToMongoDB(uid: string): Promise<void> {
+  const baseUrl = BACKEND_URL || 'http://localhost:4000';
+
+  const response = await fetch(`${baseUrl}/save-uid`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ uid }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to save UID to MongoDB');
+  }
+}
