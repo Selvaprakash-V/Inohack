@@ -45,7 +45,7 @@ export default function LoginScreen({ navigation }: any) {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const uid = userCredential.user.uid;
       console.log('Successfully signed in with UID:', uid);
-      navigation.replace('WelcomeGesture');
+        // Navigation will happen automatically via AppNavigator after login
       
     } catch (err: any) {
       setError(err.message || 'Failed to sign in');

@@ -45,15 +45,15 @@ export default function AppNavigator() {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           {isLoggedIn ? (
-            <>
-              <Stack.Screen name="VisualPreferenceScreen" component={VisualPreferenceScreen} />
-              <Stack.Screen name="CommunicationPreference" component={CommunicationPreferenceScreen} />
-              <Stack.Screen name="UsageContext" component={UsageContextScreen} />
-              <Stack.Screen name="LanguagePreference" component={LanguagePreferenceScreen} />
-              <Stack.Screen name="PermissionExplanation" component={PermissionExplanationScreen} />
-              <Stack.Screen name="WelcomeGesture" component={WelcomeGestureScreen} />
-              <Stack.Screen name="MainApp" component={MainAppScreen} />
-            </>
+              <>
+                <Stack.Screen name="WelcomeGesture" component={WelcomeGestureScreen} />
+                <Stack.Screen name="VisualPreferenceScreen" component={VisualPreferenceScreen} />
+                <Stack.Screen name="CommunicationPreference" component={CommunicationPreferenceScreen} />
+                <Stack.Screen name="UsageContext" component={UsageContextScreen} />
+                <Stack.Screen name="LanguagePreference" component={LanguagePreferenceScreen} />
+                <Stack.Screen name="PermissionExplanation" component={PermissionExplanationScreen} />
+                <Stack.Screen name="MainApp" component={MainAppScreen} />
+              </>
           ) : (
             <>
               <Stack.Screen name="Welcome" component={WelcomeScreen} />

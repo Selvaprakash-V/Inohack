@@ -31,3 +31,20 @@ export async function storeOnboardingData(onboarding: OnboardingData) {
 
   return response.json();
 }
+
+export async function fetchOnboardingData() {
+  const user = auth.currentUser;
+  if (!user) throw new Error('No authenticated user');
+
+  const response = await fetch(`${baseUrl}/onboarding?uid=${user.uid}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text);
+  }
+
+  return response.json();
+}

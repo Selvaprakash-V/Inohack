@@ -10,6 +10,13 @@ typescript
 ts-node
 dev
 
+# Backend Start Command
+# If you have the dev script in backend/package.json:
+#   cd backend
+#   npm run dev
+# Otherwise:
+#   npx ts-node src/app.ts
+
 # Frontend (React Native/Expo)
 expo
 react
