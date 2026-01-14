@@ -1,40 +1,96 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
-import Video from 'react-native-video';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
+import React, { useEffect, useRef } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Animated,
+  Dimensions,
+} from 'react-native';
+import { Video, ResizeMode } from 'expo-av';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { RootParamList } from '../../navigation/AppNavigator';
 
+type WelcomeGestureNavProp = StackNavigationProp<
+  RootParamList,
+  'WelcomeGesture'
+>;
+
+const { width } = Dimensions.get('window');
+
 export default function WelcomeGestureScreen() {
-  const navigation = useNavigation<NavigationProp<RootParamList>>();
-  const fadeAnim = new Animated.Value(0);
+  const navigation = useNavigation<WelcomeGestureNavProp>();
+
+  const videoScale = useRef(new Animated.Value(0.6)).current;
+  const textOpacity = useRef(new Animated.Value(0)).current;
+  const textTranslate = useRef(new Animated.Value(20)).current;
 
   useEffect(() => {
-    Animated.timing(fadeAnim, {
+    // Video pop-in animation
+    Animated.spring(videoScale, {
       toValue: 1,
-      duration: 2000,
+      friction: 6,
+      tension: 60,
       useNativeDriver: true,
     }).start();
 
+    // Text fade + slide animation
+    Animated.sequence([
+      Animated.delay(800),
+      Animated.parallel([
+        Animated.timing(textOpacity, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+        Animated.timing(textTranslate, {
+          toValue: 0,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+      ]),
+    ]).start();
+
+    // Navigate after 4 seconds (video duration)
     const timer = setTimeout(() => {
-      navigation.navigate('MainApp'); // Use navigate instead of replace
-    }, 5000);
+      navigation.replace('MainApp');
+    }, 4000);
 
     return () => clearTimeout(timer);
-  }, [navigation, fadeAnim]);
+  }, [navigation, videoScale, textOpacity, textTranslate]);
 
   return (
     <View style={styles.container}>
-      <Video
-        source={require('../../assets/welcomegesture.mp4')}
-        style={styles.video}
-        resizeMode="contain"
-        repeat={false}
-        paused={false}
-      />
-      <Animated.View style={[styles.textContainer, { opacity: fadeAnim }]}>
-        <Text style={styles.header}>OneVoice</Text>
-        <View style={styles.line} />
-        <Text style={styles.subHeader}>Every Conversation matters</Text>
+      {/* Video Avatar */}
+      <Animated.View
+        style={[
+          styles.videoWrapper,
+          { transform: [{ scale: videoScale }] },
+        ]}
+      >
+        <Video
+          source={require('../../assets/welcomegesture.mp4')}
+          style={styles.video}
+          resizeMode={ResizeMode.COVER}
+          shouldPlay
+          isLooping={false}
+        />
+      </Animated.View>
+
+      {/* Text */}
+      <Animated.View
+        style={[
+          styles.textContainer,
+          {
+            opacity: textOpacity,
+            transform: [{ translateY: textTranslate }],
+          },
+        ]}
+      >
+        <Text style={styles.title}>OneVoice</Text>
+        <Text style={styles.subtitle}>
+          Every conversation matters
+        </Text>
       </Animated.View>
     </View>
   );
@@ -43,31 +99,45 @@ export default function WelcomeGestureScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#0A0F2C',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
   },
+
+  videoWrapper: {
+    width: width * 0.65,
+    height: width * 0.65,
+    borderRadius: width * 0.325,
+    overflow: 'hidden',
+    backgroundColor: '#000',
+    shadowColor: '#5AD7FF',
+    shadowOpacity: 0.45,
+    shadowRadius: 25,
+    elevation: 12,
+  },
+
   video: {
     width: '100%',
-    height: 300,
+    height: '100%',
   },
+
   textContainer: {
+    marginTop: 28,
     alignItems: 'center',
-    marginTop: 20,
   },
-  header: {
+
+  title: {
+    fontFamily: 'SpaceGrotesk_600SemiBold',
     fontSize: 32,
-    fontWeight: 'bold',
-    color: '#000',
+    color: '#F1F6FF',
+    letterSpacing: 0.6,
   },
-  line: {
-    width: '60%',
-    height: 2,
-    backgroundColor: '#000',
-    marginVertical: 10,
-  },
-  subHeader: {
-    fontSize: 16,
-    color: '#555',
+
+  subtitle: {
+    marginTop: 6,
+    fontFamily: 'Inter_400Regular',
+    fontSize: 15,
+    color: '#A9B7D0',
+    letterSpacing: 0.3,
   },
 });

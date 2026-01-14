@@ -18,7 +18,6 @@ const COLORS = {
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../services/firebase';
-import { checkUidInMongoDB, saveUidToMongoDB } from '../../services/onboardingApi';
 
 export default function LoginScreen({ navigation }: any) {
   const [showEmailSignIn, setShowEmailSignIn] = useState(false);
@@ -45,14 +44,9 @@ export default function LoginScreen({ navigation }: any) {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const uid = userCredential.user.uid;
-
-      const uidExists = await checkUidInMongoDB(uid);
-      if (uidExists) {
-        navigation.replace('WelcomeGesture'); // Navigate to WelcomeGesture if uid exists
-      } else {
-        await saveUidToMongoDB(uid); // Save uid to MongoDB
-        navigation.navigate('CollectDetails'); // Navigate to a screen to collect details
-      }
+      console.log('Successfully signed in with UID:', uid);
+      navigation.replace('WelcomeGesture');
+      
     } catch (err: any) {
       setError(err.message || 'Failed to sign in');
     }
