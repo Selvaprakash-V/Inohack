@@ -31,13 +31,15 @@ export default function PermissionExplanationScreen({ navigation }: any) {
 
   const handleContinue = async () => {
     try {
-      await storeOnboardingData({
+      const payload = {
         textSize,
         communicationPreference,
         usageContexts,
         primaryLanguage,
         secondaryLanguage,
-      });
+      };
+      console.log('Payload being sent to backend:', payload);
+      await storeOnboardingData(payload);
     } catch (error) {
       console.warn('Failed to store onboarding data', error);
     }
