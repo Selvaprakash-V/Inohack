@@ -48,3 +48,65 @@ export async function fetchOnboardingData() {
 
   return response.json();
 }
+
+export async function saveContextPersonalization(contextName: string, data: {
+  struggles: string;
+  preference: string;
+  tone: string;
+  goals: string;
+  assistanceStyle: string;
+}) {
+  const user = auth.currentUser;
+  if (!user) throw new Error('No authenticated user');
+
+  const payload = {
+    uid: user.uid,
+    contextName,
+    ...data,
+  };
+
+  const response = await fetch(`${baseUrl}/users/${user.uid}/contexts/${contextName}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text);
+  }
+
+  return response.json();
+}
+
+export async function fetchContextPersonalization(contextName: string) {
+  const user = auth.currentUser;
+  if (!user) throw new Error('No authenticated user');
+
+  const response = await fetch(`${baseUrl}/users/${user.uid}/contexts/${contextName}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text);
+  }
+
+  return response.json();
+}
+
+export async function saveGeneratedPrompt(uid: string, prompt: string) {
+  const response = await fetch(`${baseUrl}/users/${uid}/generatedPrompt`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text);
+  }
+
+  return response.json();
+}

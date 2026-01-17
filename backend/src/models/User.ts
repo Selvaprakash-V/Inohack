@@ -13,6 +13,7 @@ export interface IUser extends Document {
   onboarding: Onboarding;
   createdAt: Date;
   updatedAt: Date;
+  generatedPrompt?: string; // Added field for storing generated prompts
   // Future fields: preferences, personalization, aiEmbeddings, etc.
 }
 
@@ -24,12 +25,12 @@ const OnboardingSchema: Schema = new Schema({
   secondaryLanguage: { type: String, required: true },
 });
 
-
 const UserSchema: Schema = new Schema({
   uid: { type: String, required: true, unique: true, index: true },
   onboarding: { type: OnboardingSchema, required: true },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
+  generatedPrompt: { type: String }, // Added field for storing generated prompts
   // Future fields: preferences, personalization, aiEmbeddings, etc.
 });
 
@@ -42,8 +43,5 @@ UserSchema.index({
   'onboarding.secondaryLanguage': 1,
   uid: 1
 });
-
-
-
 
 export default mongoose.model<IUser>('User', UserSchema, 'onboarding');

@@ -25,20 +25,28 @@ export type PersonalizationData = {
 
 // --- Main Prompt Builder ---
 
+import { fetchContextPersonalization, saveGeneratedPrompt } from './onboardingApi';
+
 /**
  * Builds the system prompt for the AI assistant.
  * @param uid - Firebase UID of the user
  * @param context - Active context (must be in onboarding.usageContexts)
  * @param onboarding - Onboarding data
- * @param personalization - Personalization data (may be null)
  * @returns The final system prompt string
  */
-export function buildSystemPrompt(
+export async function buildSystemPrompt(
   uid: string,
   context: string,
-  onboarding: OnboardingData,
-  personalization: PersonalizationData | null
-): string {
+  onboarding: OnboardingData
+): Promise<string> {
+  let personalization: PersonalizationData | null = null;
+
+  try {
+    personalization = await fetchContextPersonalization(context);
+  } catch (error) {
+    console.warn(`Failed to fetch personalization for context ${context}:`, error);
+  }
+
   // 1. Identity of the assistant
   let prompt = `You are a helpful digital assistant for a deaf or hard of hearing user.`;
 
@@ -109,6 +117,13 @@ export function buildSystemPrompt(
   prompt += `\n- Use large, readable text.`;
   prompt += `\n- Ensure high contrast and accessibility.`;
   prompt += `\n- No tiny buttons or hard-to-read elements.`;
+
+  // Save the generated prompt to MongoDB
+  try {
+    await saveGeneratedPrompt(uid, prompt);
+  } catch (error) {
+    console.error('Failed to save generated prompt:', error);
+  }
 
   return prompt;
 }
