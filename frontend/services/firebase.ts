@@ -8,6 +8,7 @@ import {
   FIREBASE_MESSAGING_SENDER_ID, 
   FIREBASE_APP_ID 
 } from '@env';
+import Constants from 'expo-constants';
 
 const firebaseConfig = {
   apiKey: FIREBASE_API_KEY,
@@ -30,5 +31,14 @@ try {
     console.warn('Firebase initialization:', error.message);
   }
 }
+
+// Centralized backend URL configuration
+export const BACKEND_URL = 'http://localhost:4000';
+
+// Example usage of BACKEND_URL
+export const apiCall = async (endpoint: string, options: RequestInit) => {
+  const response = await fetch(`${BACKEND_URL}/${endpoint}`, options);
+  return response.json();
+};
 
 export { app, auth };

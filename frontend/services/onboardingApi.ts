@@ -1,7 +1,8 @@
-import { auth } from './firebase';
+import { auth, BACKEND_URL } from './firebase';
 import { OnboardingData } from '../context/OnboardingContext';
 
-const baseUrl = 'http://10.242.218.241:4000';
+// Replace baseUrl with BACKEND_URL
+const baseUrl = BACKEND_URL;
 
 export async function storeOnboardingData(onboarding: OnboardingData) {
   const user = auth.currentUser;
@@ -36,13 +37,14 @@ export async function fetchOnboardingData() {
   const user = auth.currentUser;
   if (!user) throw new Error('No authenticated user');
 
-  const response = await fetch(`${baseUrl}/onboarding?uid=${user.uid}`, {
+  const response = await fetch(`${BACKEND_URL}/onboarding?uid=${user.uid}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
   });
 
   if (!response.ok) {
     const text = await response.text();
+    console.error('Failed to fetch onboarding data:', text);
     throw new Error(text);
   }
 
