@@ -9,6 +9,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const onboarding_1 = __importDefault(require("./routes/onboarding"));
 const user_1 = __importDefault(require("./routes/user"));
+const questionnaire_1 = __importDefault(require("./routes/questionnaire"));
 const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
@@ -19,6 +20,7 @@ mongoose_1.default.connect(mongoUri || '')
     .catch((err) => console.error('MongoDB connection error:', err));
 app.use('/onboarding', onboarding_1.default);
 app.use('/users', user_1.default);
+app.use('/questionnaire', questionnaire_1.default);
 app.get('/', (req, res) => {
     res.send('OneVoice API running');
 });

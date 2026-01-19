@@ -1,11 +1,20 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
+export interface Questionnaire {
+  communicationChallenges: string;
+  preferredStyle: string;
+  contextNeeds: string;
+  signNuances: string;
+  techFeedback: string;
+}
+
 export interface Onboarding {
   textSize: string;
   communicationPreference: string;
   usageContexts: string[];
   primaryLanguage: string;
   secondaryLanguage: string;
+  questionnaire?: Questionnaire; // Added questionnaire field
 }
 
 export interface IUser extends Document {
@@ -17,12 +26,21 @@ export interface IUser extends Document {
   // Future fields: preferences, personalization, aiEmbeddings, etc.
 }
 
+const QuestionnaireSchema: Schema = new Schema({
+  communicationChallenges: { type: String, required: false },
+  preferredStyle: { type: String, required: false },
+  contextNeeds: { type: String, required: false },
+  signNuances: { type: String, required: false },
+  techFeedback: { type: String, required: false },
+});
+
 const OnboardingSchema: Schema = new Schema({
   textSize: { type: String, required: true },
   communicationPreference: { type: String, required: true },
   usageContexts: { type: [String], required: true },
   primaryLanguage: { type: String, required: true },
   secondaryLanguage: { type: String, required: true },
+  questionnaire: { type: QuestionnaireSchema, required: false }, // Added questionnaire schema
 });
 
 const UserSchema: Schema = new Schema({

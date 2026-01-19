@@ -112,3 +112,32 @@ export async function saveGeneratedPrompt(uid: string, prompt: string) {
 
   return response.json();
 }
+
+export async function submitQuestionnaire(responses: {
+  communicationChallenges: string;
+  preferredStyle: string;
+  contextNeeds: string;
+  signNuances: string;
+  techFeedback: string;
+}) {
+  const user = auth.currentUser;
+  if (!user) throw new Error('No authenticated user');
+
+  const payload = {
+    uid: user.uid,
+    questionnaire: responses,
+  };
+
+  const response = await fetch(`${baseUrl}/questionnaire`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text);
+  }
+
+  return response.json();
+}

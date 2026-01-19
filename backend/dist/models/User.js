@@ -34,12 +34,20 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
+const QuestionnaireSchema = new mongoose_1.Schema({
+    communicationChallenges: { type: String, required: false },
+    preferredStyle: { type: String, required: false },
+    contextNeeds: { type: String, required: false },
+    signNuances: { type: String, required: false },
+    techFeedback: { type: String, required: false },
+});
 const OnboardingSchema = new mongoose_1.Schema({
     textSize: { type: String, required: true },
     communicationPreference: { type: String, required: true },
     usageContexts: { type: [String], required: true },
     primaryLanguage: { type: String, required: true },
     secondaryLanguage: { type: String, required: true },
+    questionnaire: { type: QuestionnaireSchema, required: false }, // Added questionnaire schema
 });
 const UserSchema = new mongoose_1.Schema({
     uid: { type: String, required: true, unique: true, index: true },

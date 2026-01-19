@@ -45,7 +45,8 @@ export default function PermissionExplanationScreen({ navigation }: any) {
     }
 
     setPermissionsExplained(true);
-    navigation.replace('WelcomeGesture'); // Navigate to WelcomeGesture
+    console.log('Navigating to Questionnaire'); // Updated log
+    navigation.replace('Questionnaire'); // Updated screen name
   };
 
   return (

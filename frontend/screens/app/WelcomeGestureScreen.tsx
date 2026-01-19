@@ -17,6 +17,7 @@ type WelcomeGestureNavProp = StackNavigationProp<
 >;
 
 const { width } = Dimensions.get('window');
+const AVATAR_SIZE = width * 0.42;
 
 export default function WelcomeGestureScreen() {
   const navigation = useNavigation<WelcomeGestureNavProp>();
@@ -105,15 +106,15 @@ const styles = StyleSheet.create({
   },
 
   videoWrapper: {
-    width: width * 0.65,
-    height: width * 0.65,
-    borderRadius: width * 0.325,
+    width: AVATAR_SIZE,
+    height: AVATAR_SIZE,
+    borderRadius: AVATAR_SIZE / 2,
     overflow: 'hidden',
     backgroundColor: '#000',
     shadowColor: '#5AD7FF',
-    shadowOpacity: 0.45,
-    shadowRadius: 25,
-    elevation: 12,
+    shadowOpacity: 0.25,
+    shadowRadius: 18,
+    elevation: 8,
   },
 
   video: {
@@ -122,21 +123,21 @@ const styles = StyleSheet.create({
   },
 
   textContainer: {
-    marginTop: 28,
+    marginTop: 18,
     alignItems: 'center',
   },
 
   title: {
     fontFamily: 'SpaceGrotesk_600SemiBold',
-    fontSize: 32,
+    fontSize: 30,
     color: '#F1F6FF',
     letterSpacing: 0.6,
   },
 
   subtitle: {
-    marginTop: 6,
+    marginTop: 4,
     fontFamily: 'Inter_400Regular',
-    fontSize: 15,
+    fontSize: 14,
     color: '#A9B7D0',
     letterSpacing: 0.3,
   },

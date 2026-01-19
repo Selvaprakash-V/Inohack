@@ -55,7 +55,7 @@ export default function CommunicationPreferenceScreen({ navigation }: any) {
           ]}
           onPress={() => setCommunicationPreference('text')}
         >
-          <View style={styles.imageLayer} pointerEvents="none">
+          <View style={[styles.imageLayer, { pointerEvents: 'none' }]}>
             <Image
               source={IMAGES.text}
               style={styles.contextImage}
@@ -86,7 +86,7 @@ export default function CommunicationPreferenceScreen({ navigation }: any) {
           ]}
           onPress={() => setCommunicationPreference('sign')}
         >
-          <View style={styles.imageLayer} pointerEvents="none">
+          <View style={[styles.imageLayer, { pointerEvents: 'none' }]}>
             <Image
               source={IMAGES.sign}
               style={styles.contextImage}
@@ -118,7 +118,7 @@ export default function CommunicationPreferenceScreen({ navigation }: any) {
         ]}
         onPress={() => setCommunicationPreference('both')}
       >
-        <View style={styles.imageLayer} pointerEvents="none">
+        <View style={[styles.imageLayer, { pointerEvents: 'none' }]}>
           <Image
             source={IMAGES.both}
             style={styles.contextImageWide}
