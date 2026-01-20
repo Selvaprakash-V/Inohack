@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "617216950786",
+    "firebase_url": "https://event-d540a-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "event-d540a",
+    "storage_bucket": "event-d540a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:617216950786:android:49cba9a166539883d69d1b",
+        "android_client_info": {
+          "package_name": "com.innovaid.OneVoice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "617216950786-n1dllageds14inkn6p43ubnaoj5l7l3c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZuFQ-npNo_Um6_ixUTZiCmMThnZSCNuY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "617216950786-n1dllageds14inkn6p43ubnaoj5l7l3c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
